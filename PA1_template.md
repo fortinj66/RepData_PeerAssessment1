@@ -1,20 +1,17 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
 
-```{r}
+
+```r
 activity_data=read.csv(unzip("activity.zip"))
 activity_no_na = activity_data[!is.na(activity_data$steps),]
 ```
 
 ## What is mean total number of steps taken per day?
-```{r}
+
+```r
 library(plyr)
 library(ggplot2)
 activity_day = ddply(activity_no_na, .(date), summarize, StepsByDay=sum(steps))
@@ -31,11 +28,14 @@ ggplot(activity_day,
           labs(y="Steps")
 ```
 
-#### Mean number of steps per day : `r  meanActivityByDay`
-#### Median number of steps per day: `r medianActivityByDay`
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
+
+#### Mean number of steps per day : 1.0766\times 10^{4}
+#### Median number of steps per day: 1.0765\times 10^{4}
 
 ## What is the average daily activity pattern?
-```{r}
+
+```r
 activity_interval = ddply(activity_no_na, .(interval), summarize, StepsByInterval=mean(steps))
 ggplot(activity_interval, 
          aes(x = interval, 
@@ -45,15 +45,20 @@ ggplot(activity_interval,
           ggtitle("Average Steps Per Interval") + 
           labs(x="Interval") + 
           labs(y="Steps")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
 max_activity_steps = max(activity_interval$StepsByInterval)
 max_activity_interval = activity_interval[activity_interval$StepsByInterval == max_activity_steps, "interval"]
 ```
-#### Interval with highest average steps: `r  max_activity_interval`  with `r max_activity_steps` steps.
+#### Interval with highest average steps: 835  with 206.1698113 steps.
 
 
 ## Imputing missing values using average of interval value
-``` {r}
+
+```r
 activity_data_impute = activity_data
 activity_data_na_map = is.na(activity_data_impute)
 activity_data_na_count = sum(activity_data_na_map)
@@ -80,20 +85,22 @@ ggplot(activity_day_impute,
           ggtitle("Daily Steps Per Day (Imputed Data)") + 
           labs(x="Date") + 
           labs(y="Steps")
-
 ```
 
-#### Mean number of steps per day (Imputed): `r  meanActivityByDay_impute`
-#### Median number of steps per day (Imputed): `r medianActivityByDay_impute`
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
 
-#### Difference between mean imputed and non-imputed data: `r diffmean`
-#### Difference between median imputed and non-imputed data: `r diffmedian`
+#### Mean number of steps per day (Imputed): 1.0766\times 10^{4}
+#### Median number of steps per day (Imputed): 1.0766\times 10^{4}
+
+#### Difference between mean imputed and non-imputed data: 0
+#### Difference between median imputed and non-imputed data: 1
 
 #### Based on the difference in mean and median there is no significant difference (in this case) between using Imputed data and data with the NAs removed.  The non-imputed data is just as valid
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r}
+
+```r
 activity_data_impute$PartOfWeek = 
     ifelse(weekdays(as.Date(activity_data_impute$date)) %in% c("Saturday","Sunday"),"weekend","weekday")
 
@@ -109,5 +116,7 @@ ggplot(activity_weekend_impute,
           labs(x="Interval") + 
           labs(y="Steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
 #### Based on the graphs we see that there are more steps earlier during the weekdays, and a higher amount of steps later in the day on the weekends.  
