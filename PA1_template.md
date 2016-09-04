@@ -19,13 +19,12 @@ meanActivityByDay = round(mean(activity_day$StepsByDay))
 medianActivityByDay = round(median(activity_day$StepsByDay))
 
 ggplot(activity_day, 
-         aes(x = date, 
-             y = StepsByDay, 
-        )) +
-          geom_bar(stat = "identity") + 
-          ggtitle("Daily Steps Per Day") + 
-          labs(x="Date") + 
-          labs(y="Steps")
+         aes(x = StepsByDay
+         )) +
+          geom_bar(stat = "bin", binwidth = 2500) + 
+          ggtitle("Steps Per Day") + 
+          labs(x="Number of Steps") + 
+          labs(y="Number of Days")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-2-1.png)<!-- -->
@@ -78,13 +77,12 @@ diffmean = meanActivityByDay_impute - meanActivityByDay
 diffmedian = medianActivityByDay_impute - medianActivityByDay
 
 ggplot(activity_day_impute, 
-         aes(x = date, 
-             y = StepsByDay, 
-        )) +
-          geom_bar(stat = "identity") + 
-          ggtitle("Daily Steps Per Day (Imputed Data)") + 
-          labs(x="Date") + 
-          labs(y="Steps")
+         aes(x = StepsByDay
+         )) +
+          geom_bar(stat = "bin", binwidth = 2500, location=position_dodge()) + 
+          ggtitle("Steps Per Day (Imputed Data)") + 
+          labs(x="Number of Steps") + 
+          labs(y="# of Days")
 ```
 
 ![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
